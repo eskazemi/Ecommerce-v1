@@ -9,3 +9,6 @@ urlpatterns = [
     path('account/', include("accounts.urls", namespace="accounts")),
     path('home/', include("home.urls", namespace="home")),
 ]
+
+admin.site.site_header = 'Ecommerco'
+admin.site.site_name = 'Ecommerco'
