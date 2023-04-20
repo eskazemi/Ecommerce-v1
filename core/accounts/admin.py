@@ -5,7 +5,15 @@ from .forms import (
     UserChangeForm
 )
 from django.contrib.auth.models import Group
-from .models import User
+from .models import (
+    User,
+    OtpCode,
+)
+
+
+@admin.register(OtpCode)
+class OtpCodeAdmin(admin.ModelAdmin):
+    list_display = ("phone_number", "code", "created_at")
 
 
 class UserAdmin(BaseUserAdmin):
