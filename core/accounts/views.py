@@ -7,8 +7,8 @@ from .forms import (
     UserRegistrationForm,
     VerifyCodeForm
 )
-from ..utils import send_otp_code
-from models import (
+from .utils import send_otp_code
+from .models import (
     OtpCode,
     User,
 )
@@ -18,15 +18,16 @@ import random
 
 class UserRegisterView(View):
     form_class = UserRegistrationForm
+    template_name = 'accounts/register.html'
 
     def get(self, request, *args, **kwargs):
         form = self.form_class
-        return render(request, 'accounts/register.html', {"form": form})
+        return render(request, self.template_name, {"form": form})
 
     def post(self, request, *args, **kwargs):
         form = self.form_class(request.POST)
         if form.is_valid():
-            random_code = random.randint(0, 9999)
+            random_code = random.randint(1000, 9999)
             send_otp_code(form.cleaned_data["phone_number"], random_code)
             OtpCode.objects.create(phone_number=form.cleaned_data["phone_number"], code=random_code)
             request.session["user_register_info"] = {
@@ -34,15 +35,14 @@ class UserRegisterView(View):
                 "email": form.cleaned_data["email"],
                 "first_name": form.cleaned_data["first_name"],
                 "last_name": form.cleaned_data["last_name"],
-                "username": form.cleaned_data["username"],
                 "password": form.cleaned_data["password"]
             }
             messages.success(request, "we send you code ", "success")
-            redirect("accounts:verify_code")
-        redirect("home:home")
+            return redirect("accounts:verify")
+        return render(request, self.template_name , {"form": form})
 
 
-class UserRegisterVerifyCode(View):
+class UserRegisterVerifyCodeView(View):
     form_class = VerifyCodeForm
 
     def get(self, request, *args, **kwargs):
@@ -62,14 +62,12 @@ class UserRegisterVerifyCode(View):
                                          last_name=user_session["last_name"],
                                          password=user_session["password"]
 
-                )
+                                         )
                 otp_obj.delete()
                 messages.success(request, "you register successfully", "success")
-                redirect("home:home")
+                return redirect("home:home")
             else:
                 messages.error(request, "this is code wrong", 'danger')
-                redirect("accounts:verify")
+                return redirect("accounts:verify")
 
-        redirect("home:home")
-
-
+        return redirect("home:home")
