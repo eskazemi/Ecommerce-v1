@@ -2,6 +2,10 @@ from django.shortcuts import (
     render,
     redirect,
 )
+from datetime import (
+    timedelta,
+    datetime,
+)
 from django.views import View
 from .forms import (
     UserRegistrationForm,
@@ -12,8 +16,13 @@ from .models import (
     OtpCode,
     User,
 )
+import pytz
 from django.contrib import messages
 import random
+from django.contrib.auth import (
+    logout,
+)
+from django.contrib.auth.mixins import LoginRequiredMixin
 
 
 class UserRegisterView(View):
@@ -39,7 +48,7 @@ class UserRegisterView(View):
             }
             messages.success(request, "we send you code ", "success")
             return redirect("accounts:verify")
-        return render(request, self.template_name , {"form": form})
+        return render(request, self.template_name, {"form": form})
 
 
 class UserRegisterVerifyCodeView(View):
@@ -55,7 +64,8 @@ class UserRegisterVerifyCodeView(View):
         form = self.form_class(request.POST)
         if form.is_valid():
             cd = form.cleaned_data
-            if cd["code"] == otp_obj.code:
+            if cd["code"] == otp_obj.code and \
+                    otp_obj.created_at + timedelta(minutes=2) > datetime.now().replace(tzinfo=pytz.UTC):
                 User.objects.create_user(phone_number=user_session["phone_number"],
                                          email=user_session["email"],
                                          first_name=user_session["first_name"],
@@ -67,7 +77,14 @@ class UserRegisterVerifyCodeView(View):
                 messages.success(request, "you register successfully", "success")
                 return redirect("home:home")
             else:
-                messages.error(request, "this is code wrong", 'danger')
+                messages.error(request, "this is code wrong or code expired", 'danger')
                 return redirect("accounts:verify")
 
         return redirect("home:home")
+
+
+class UserLogoutView(LoginRequiredMixin, View):
+    def get(self, request):
+        logout(request)
+        messages.success(request, "logout user successfully", 'success')
+        return redirect('home:home')
