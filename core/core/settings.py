@@ -25,7 +25,8 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'accounts.apps.AccountsConfig',
     'home.apps.HomeConfig',
-    'product.apps.ProductConfig'
+    'product.apps.ProductConfig',
+    'storages',
 ]
 
 MIDDLEWARE = [
@@ -105,10 +106,9 @@ STATICFILES_DIRS = [
     BASE_DIR / 'static'
 ]
 
-
-MEDIA_URL = '/media/'
-# where upload
-MEDIA_ROOT = BASE_DIR / 'media'
+# MEDIA_URL = '/media/'
+# # where upload
+# MEDIA_ROOT = BASE_DIR / 'media'
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
@@ -116,3 +116,14 @@ MEDIA_ROOT = BASE_DIR / 'media'
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 AUTH_USER_MODEL = 'accounts.User'
+
+# Arvan Cloud Storage
+
+DEFAULT_FILE_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
+AWS_S3_ACCESS_KEY_ID = "test"
+AWS_S3_SECRET_ACCESS_KEY = "e10ca4a6ec71980ec21ee146975698c9b76d944680fa87502abf88dd284d5fe4"
+AWS_S3_ENDPOINT_URL = "https://s3.ir-tbz-sh1.arvanstorage.com"
+AWS_STORAGE_BUCKET_NAME = "eskazemi"
+AWS_SERVICE_NAME = "s3"
+AWS_S3_FILE_OVERWRITE = False   # two file same name do replace?
+AWS_LOCAL_STORAGE = f'{BASE_DIR}/aws/'
