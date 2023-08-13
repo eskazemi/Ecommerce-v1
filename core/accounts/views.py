@@ -9,7 +9,8 @@ from datetime import (
 from django.views import View
 from .forms import (
     UserRegistrationForm,
-    VerifyCodeForm
+    VerifyCodeForm,
+    LoginForm,
 )
 from .utils import send_otp_code
 from .models import (
@@ -21,6 +22,8 @@ from django.contrib import messages
 import random
 from django.contrib.auth import (
     logout,
+    login,
+    authenticate
 )
 from django.contrib.auth.mixins import LoginRequiredMixin
 
@@ -86,5 +89,26 @@ class UserRegisterVerifyCodeView(View):
 class UserLogoutView(LoginRequiredMixin, View):
     def get(self, request):
         logout(request)
-        messages.success(request, "logout user successfully", 'success')
+        messages.success(request, "you logged out successfully", 'success')
         return redirect('home:home')
+
+
+class UserLoginView(View):
+    form_class = LoginForm
+    template_form = 'accounts/login.html'
+
+    def get(self, request, *args, **kwargs):
+        form = self.form_class
+        return render(request, self.template_form, {"form": form})
+
+    def post(self, request, *args, **kwargs):
+        form = self.form_class(request.POST)
+        if form.is_valid():
+            cd = form.cleaned_data
+            user = authenticate(request, phone_number=cd["phone"], password=cd["password"])
+            if user is not None:
+                login(request, user)
+                messages.success(request, "you logged in successfully", "success")
+                return redirect("home:home")
+            messages.error(request, "phone or password is wrong", "warning")
+        return render(request, self.template_form , {"form": form})
