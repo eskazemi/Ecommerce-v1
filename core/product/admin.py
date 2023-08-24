@@ -6,12 +6,18 @@ from .models import (
 
 
 @admin.register(Product)
-class OtpCodeAdmin(admin.ModelAdmin):
-    list_display = ("name", "slug", "category")
+class ProductAdmin(admin.ModelAdmin):
+    list_display = ("name", "slug", "price", "is_available")
+    raw_id_fields = ('category',)
+    search_fields = ("name",)
+    list_filter = ("is_available",)
 
 
 @admin.register(Category)
-class OtpCodeAdmin(admin.ModelAdmin):
-    list_display = ("name", "slug")
+class CategoryAdmin(admin.ModelAdmin):
+    list_display = ("name", "slug", 'is_sub')
+    search_fields = ("name",)
+    list_filter = ("is_sub",)
+
 
 
