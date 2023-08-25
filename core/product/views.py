@@ -7,7 +7,7 @@ from .models import (
     Product,
     Category,
 )
-from orders.froms import CartAddForm
+from orders.forms import CartAddForm
 
 
 class ProductView(View):

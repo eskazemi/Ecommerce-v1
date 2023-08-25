@@ -4,42 +4,19 @@ from django.shortcuts import (
     redirect
 )
 from django.views import View
-from product.models import Product
 from .cart import Cart
-from .models import (
+from ..models import (
     Order,
-    OrderItem
+    OrderItem,
 )
-from .froms import CartAddForm
-from .pay import (
+from ..forms import (
+    CouponForm,
+)
+from ..pay import (
     send_request,
     verify
 )
 from django.contrib.auth.mixins import LoginRequiredMixin
-
-
-class CartView(View):
-    def get(self, request, *args, **kwargs):
-        cart = Cart(request)
-        return render(request, 'orders/cart.html', {"cart": cart})
-
-
-class CartAddView(View):
-    def post(self, request, product_id, *args, **kwargs):
-        cart = Cart(request)
-        product = get_object_or_404(Product, id=product_id)
-        form = CartAddForm(request.POST)
-        if form.is_valid():
-            cart.add(product=product, quantity=form.cleaned_data["quantity"])
-        return redirect('orders:cart')
-
-
-class CartRemoveView(View):
-    def get(self, request, product_id):
-        cart = Cart(request)
-        product = get_object_or_404(Product, id=product_id)
-        cart.remove_session(product)
-        return redirect('orders:cart')
 
 
 class OrderCreateView(View, LoginRequiredMixin):
@@ -56,9 +33,11 @@ class OrderCreateView(View, LoginRequiredMixin):
 
 
 class OrderDetailView(View, LoginRequiredMixin):
+    form_class = CouponForm
+
     def get(self, request, order_id):
         order = get_object_or_404(Order, id=order_id)
-        return render(request, 'orders/order.html', {"order": order})
+        return render(request, 'orders/order.html', {"order": order, 'coupon': self.form_class})
 
 
 class OrderPayView(LoginRequiredMixin, View):
