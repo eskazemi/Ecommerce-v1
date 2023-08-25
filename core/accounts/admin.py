@@ -40,6 +40,14 @@ class UserAdmin(BaseUserAdmin):
     search_fields = ('phone_number',)
     ordering = ('created_at',)
     filter_horizontal = ('groups', 'user_permissions')
+    readonly_fields = ('last_login',)
+
+    def get_form(self, request, obj=None, **kwargs):
+        form = super().get_form(request, obj=None, **kwargs)
+        is_superuser = request.user.is_superuser
+        if not is_superuser:
+            form.base_fields['is_superuser'].disable = True
+        return form
 
 
 admin.site.unregister(Group)
