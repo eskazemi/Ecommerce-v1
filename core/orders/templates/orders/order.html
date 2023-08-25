@@ -3,6 +3,7 @@
 {% block content %}
     <p>Checkout</p>
     <p>Total {{ order.get_order_price }} Toman</p>
+<a url="{% url 'orders:order_pay' order.id %}" class="btn btn-success">پراخت</a>
 
 {% endblock %}
 

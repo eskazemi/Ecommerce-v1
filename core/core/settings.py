@@ -131,5 +131,9 @@ AWS_S3_SECRET_ACCESS_KEY = "e10ca4a6ec71980ec21ee146975698c9b76d944680fa87502abf
 AWS_S3_ENDPOINT_URL = "https://s3.ir-tbz-sh1.arvanstorage.com"
 AWS_STORAGE_BUCKET_NAME = "eskazemi"
 AWS_SERVICE_NAME = "s3"
-AWS_S3_FILE_OVERWRITE = False   # two file same name do replace?
+AWS_S3_FILE_OVERWRITE = False  # two file same name do replace?
 AWS_LOCAL_STORAGE = f'{BASE_DIR}/aws/'
+
+# zarinpal
+MERCHANT = "00000000-0000-0000-0000-000000000000"
+SANDBOX = True
