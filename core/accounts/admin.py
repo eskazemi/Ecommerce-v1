@@ -26,14 +26,20 @@ class UserAdmin(BaseUserAdmin):
         ('Main', {
             'fields': ('email', 'phone_number', 'first_name', 'last_name', 'password')
         }),
-        ('Permissions', {"fields": ('is_active', 'is_admin', 'last_login')}),
+        ('Permissions', {"fields": ('is_active',
+                                    'is_admin',
+                                    'is_superuser',
+                                    'last_login',
+                                    'groups',
+                                    'user_permissions')
+                         }),
     )
     add_fieldsets = (
         (None, {"fields": ('email', 'phone_number', 'first_name', 'last_name', 'password', 'password_confirm')}),
     )
     search_fields = ('phone_number',)
     ordering = ('created_at',)
-    filter_horizontal = ()
+    filter_horizontal = ('groups', 'user_permissions')
 
 
 admin.site.unregister(Group)

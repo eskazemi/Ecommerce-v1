@@ -9,7 +9,7 @@ from ..cart import Cart
 from ..forms import (
     CartAddForm,
 )
-
+from django.core.exceptions import PermissionDenied
 
 class CartView(View):
     def get(self, request, *args, **kwargs):
@@ -18,6 +18,13 @@ class CartView(View):
 
 
 class CartAddView(View):
+
+    def dispatch(self, request, *args, **kwargs):
+        if not request.user.has_perm('orders.add_order'):
+            raise PermissionDenied()
+        super().dispatch(request, *args, **kwargs)
+        return redirect('orders:cart')
+
     def post(self, request, product_id, *args, **kwargs):
         cart = Cart(request)
         product = get_object_or_404(Product, id=product_id)
