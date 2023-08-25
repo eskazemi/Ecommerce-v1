@@ -10,6 +10,12 @@
     <p>price: {{ product.price }} Toman</p>
    <img src="{{ product.image.url }}" style="width:1200px">
     <p>{{ product.description }}</p>
+<br>
+    <form action="{% url 'orders:cart_add' product.id %}" method="post">
+        {% csrf_token %}
+        {{ form}}
+        <input type="submit" value="add to cart" class="btn btn-info ml-1">
+    </form>
 
 {% endblock %}
 
