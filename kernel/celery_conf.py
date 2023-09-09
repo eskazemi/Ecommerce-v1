@@ -2,9 +2,9 @@ from celery import Celery
 from datetime import timedelta
 import os
 
-os.environ.setdefault("DJANGO_SETTINGS_MODULE", 'core.settings')
+os.environ.setdefault("DJANGO_SETTINGS_MODULE", 'kernel.settings')
 
-celery_app = Celery('core')
+celery_app = Celery('kernel')
 
 celery_app.autodiscover_tasks()
 
