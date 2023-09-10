@@ -3,12 +3,16 @@
 
 
 
-## Acknowledgements
+## Packages
 
  - [Django](https://www.djangoproject.com/)
- - [DRF](https://www.django-rest-framework.org/)
- - [sqLite](https://www.sqlite.org/index.html)
-- [swaager](https://swagger.io/)
+ - [psycopg2](https://pypi.org/project/psycopg2/)
+- [python-decouple](https://pypi.org/project/python-decouple/)
+ - [celery](https://www.django-rest-framework.org/)
+ - [django-celery-beat](https://pypi.org/project/django-celery-beat/)
+- [boto3](https://pypi.org/project/boto3/)
+- [django-storage](https://django-storages.readthedocs.io/)
+- [bootstrap](https://swagger.io/)
 
 
 ## Authors
