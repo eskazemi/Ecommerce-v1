@@ -6,7 +6,7 @@ from django.shortcuts import (
 from django.views import View
 from product.models import Product
 from ..cart import Cart
-from ..forms import (
+from orders.forms import (
     CartAddForm,
 )
 from django.contrib.auth.mixins import PermissionRequiredMixin

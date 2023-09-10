@@ -1,6 +1,6 @@
 from django.shortcuts import redirect
 from django.views import View
-from ..models import (
+from orders.models import (
     Coupon,
     Order,
 )
